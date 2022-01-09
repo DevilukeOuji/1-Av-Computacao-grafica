@@ -1,8 +1,7 @@
 import Printer
 import Bresenham
+import Line
 from tkinter import *
-
-Bresenham.Bresenham((0,3), (3,9))
 
 Printer.CriarTemplate()
 

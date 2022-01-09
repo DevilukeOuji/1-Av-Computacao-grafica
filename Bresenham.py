@@ -4,19 +4,17 @@ import Printer
 class Bresenham():
 
     def __init__(self, initial_point, final_point):
-        self.x1 = initial_point[0]
-        self.x2 = final_point[0]
-        self.y1 = initial_point[1]
-        self.y2 = final_point[1]
-        self.m = (initial_point[1] - final_point[1]) / (initial_point[0] - final_point[0])
+        self.x1, self.x2 = initial_point[0],final_point[0]
+        self.y1, self.y2  = initial_point[1],final_point[1]
+        self.m = (self.y2 - self.y1) / (self.x2 - self.x1)
 
     def Bresenham(self):
         points = []
         swipe_coordinates, swipe_x, swipe_y = Bresenham.reflection(self)
+        self.m = (self.y2 - self.y1) / (self.x2 - self.x1)
+        print(self.m)
         e = self.m - 0.5
-        print(self.x2)
         points.append([self.x1,self.y1])
-        #Printer.DesenharPixel(x,y)
         while self.x1 < self.x2:
             if e > 0:
                 self.y1 += 1
@@ -25,7 +23,7 @@ class Bresenham():
             print(e)
             e += self.m
             points.append([self.x1,self.y1])
-            #Printer.DesenharPixel(x,y)
+        print(points)
         Bresenham.reflectionInverse(self, swipe_coordinates, swipe_x, swipe_y, points)
         print(points)
         return points
@@ -58,9 +56,9 @@ class Bresenham():
         if swipe_y:
             for point in points:
                 point[1] *= -1
-        
-B = Bresenham((0,3),(3,9))
-points = B.Bresenham()
+    
+    def draw(self):
+        points = Bresenham.Bresenham(self)
 
-for point in points:
-    Printer.DesenharPixel(point[0], point[1])
+        for point in points:
+            Printer.DesenharPixel(point[0], point[1])
