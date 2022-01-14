@@ -1,5 +1,5 @@
 import Printer
-import Line
+import Bresenham
 import numpy as np
 class Curve:
 
@@ -13,22 +13,26 @@ class Curve:
         n = len(self.controlPt)
         for i in range(n):
             points += [[self.controlPt[i]]]
-        print(points)
         for r in range(1,n):
             for i in range(n-r):
                 x = np.array(points[i]) * (1-t)
                 y = np.array(points[i+1]) * t
-                points[i] =  (x,y) #np.dot(x,y)
+                if r == 1 and i == 0:
+                    points[i] = (x,y) 
+                else:
+                    point = np.dot(x,y)
+                    point_flatten = point.flatten()
+                    points[i] = point_flatten
         return points[0]
     
     def draw(self,):
+        conj = []
         numLines = round(len(self.controlPt) / 2 + 2)
+        b = Bresenham.Bresenham
         for i in range(1, numLines):
             t = (1.0 / numLines) * i
             self.finalPoint = Curve.DeCasteljau(self, t)
-            Line.Line.Line(self.initialPoint, self.finalPoint)
-
+            
+            conj += b.Bresenham(self.initialPoint, self.finalPoint)
+            b.draw(conj)
             self.initialPoint = self.finalPoint
-
-c = Curve((2,4),(12,9),[2,4,7,8])
-c.draw()

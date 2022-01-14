@@ -1,7 +1,7 @@
 from tkinter import *
 ## parametros iniciais
-tamanhoTela = 600 
-tamanhoPixel = int(tamanhoTela / 50)
+tamanhoTela = 1500
+tamanhoPixel = int(tamanhoTela / 150)
 
 ## criar o canvas utilizando o tkinter
 master = Tk()
