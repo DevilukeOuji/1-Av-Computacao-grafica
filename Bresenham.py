@@ -8,7 +8,8 @@ class Bresenham():
         y1, y2  = initial_point[1],final_point[1]
         points = []
         if x2 == x1:
-            points.append(Bresenham.YLine(x1, [y1,y2]))
+            points = (Bresenham.YLine(x1, [y1,y2]))
+            return points
         else: 
             m = (y2 - y1) / (x2 - x1)
             swipe_coordinates, swipe_x, swipe_y,new_x1,new_x2,new_y1,new_y2 = Bresenham.Reflection( x1,x2,y1,y2,m)
@@ -21,7 +22,6 @@ class Bresenham():
                     y1 += 1
                     e -= 1
                 x1 += 1
-                print(e)
                 e += m
                 points.append([x1,y1])
             Bresenham.ReflectionInverse( swipe_coordinates, swipe_x, swipe_y, points)
@@ -61,16 +61,21 @@ class Bresenham():
         if poli:
             for i in points:
                 for j in i:
-                    print(j)
-        for point in points:
-            Printer.DesenharPixel(point[0], point[1])
+                    Printer.DesenharPixel(j[0], j[1])
+        else: 
+            for point in points:
+                Printer.DesenharPixel(point[0], point[1])
 
     def YLine(x,Y_points):
-        points = [[x,i] for i in range(Y_points[0], Y_points[1]+1)]
+        points = []
+        Ymax = max(Y_points[0], Y_points[1]+1)
+        Ymin = min(Y_points[0], Y_points[1]+1)
+        for i in range(Ymin, Ymax):
+            points.append([x,i])
         return points
 
     def Poliline(*args):
         args = args[0]
         group = [Bresenham.Bresenham(args[i], args[i+1]) for i in range(len(args)-1)]
-        #group.append(Bresenham.Bresenham(args[len(args)-1],args[0]))
+        group.append(Bresenham.Bresenham(args[len(args)-1],args[0]))
         return group
