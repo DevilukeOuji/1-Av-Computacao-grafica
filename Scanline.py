@@ -1,30 +1,63 @@
+from Bresenham import Bresenham
+
 class Scanline:
 
     def __init__(self, edges) -> None:
         self.edges = edges
-
-    def GetMax(self):
-        Y_list = []
-        X_list = []
-        for i in range(len(self.edges)):
-            Y_list.append(self.edges[i][1])
-            X_list.append(self.edges[i][0])
-        Ymin, Ymax = min(Y_list), max(Y_list)
-        Xmin, Xmax = min(X_list), max(X_list)
-        return Ymin,Ymax, Xmin,Xmax
-
-    def Scanline(self, points):
-        Ymin,Ymax, Xmin,Xmax = Scanline.GetMax(self)
-        for y in range(Ymin, Ymax+1):
-            print(y)
-            intersection_list = []
-            for x in range(Xmin,Xmax+1): #montando a lista de interserções para um y
-                for i in points: 
-                    if [x,y] in i and [x,y] not in intersection_list: intersection_list.append([x,y]) #é um ponto? ajeitar tinkter para fazer a verificação 
-            print('intersection_list',intersection_list)
-            '''for i in range(len(intersection_list)-1): #linhas entre intersecções encontradas para um y
-                if i % 2 == 0: 
-                    b = Bresenham.Bresenham
-                    points = b.Bresenham([intersection_list[i][0],y], [intersection_list[i+1][0],y])
-                    b.draw(points)'''
+        self.critical_points = []
         
+    def InvSlope(self, aux, point):
+        return (1.0 * aux[0] - point[0]) / (1.0 * aux[1] - point[1])
+
+
+    def GetMax(self, Y_list):
+        Ymin, Ymax = min(Y_list), max(Y_list)
+        return Ymin,Ymax
+
+    def BoundBox(self):
+        Y_list = []
+        edges = self.edges
+        edges_length = len(self.edges)
+        for i in range(edges_length):
+            aux = edges[(i+1)% edges_length]
+            x, y = edges[i][0], edges[i][1]
+
+            if y < aux[1]:
+                self.critical_points += [{ "index": i,
+                "dir": 1,
+                "xIntersection": x,
+                "invSlope": Scanline.InvSlope(self, aux, edges[i])}]
+
+            aux = edges[(i-1 + edges_length)% edges_length]
+
+            if y < aux[1]:
+                self.critical_points += [{ "index": i,
+                "dir": -1,
+                "xIntersection": x,
+                "invSlope": Scanline.InvSlope(self, aux, edges[i])}]
+            Y_list.append(y)
+        return Y_list
+
+    def Scanline(self):
+        active_critical_points = []
+        Y_list = Scanline.BoundBox(self)
+        Ymin,Ymax = Scanline.GetMax(self, Y_list)
+        scanline_points = []
+        for y in range(Ymin, Ymin+3):
+            for i in range(len(active_critical_points)):
+                point = active_critical_points[i]
+                point['xIntersection'] = point['invSlope']
+                active_critical_points[i] = point
+
+            for i in range(len(self.critical_points)):
+                point = self.critical_points[i]
+                if(self.edges[point['index']][1] == y): 
+                    active_critical_points += [point]
+            print(active_critical_points)
+            active_critical_points = sorted(active_critical_points, key = lambda x: x['xIntersection'])
+            for i in range(len(active_critical_points)-1): #linhas entre intersecções encontradas para um y
+                if i % 2 == 1:
+                    print([active_critical_points[i]['xIntersection'],y], [active_critical_points[i+1]['xIntersection'],y])
+                    new_points = Bresenham.Bresenham([active_critical_points[i]['xIntersection'],y], [active_critical_points[i+1]['xIntersection'],y])
+                    scanline_points += [new_points]
+        return scanline_points
