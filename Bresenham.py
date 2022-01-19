@@ -56,15 +56,15 @@ class Bresenham():
             for point in points:
                 point[1] *= -1
     
-    def Draw(points, poli = False):
+    def Draw(points, poli = False, color = '#f00'):
 
         if poli:
             for i in points:
                 for j in i:
-                    Printer.DesenharPixel(j[0], j[1])
+                    Printer.DesenharPixel(j[0], j[1], color)
         else: 
             for point in points:
-                Printer.DesenharPixel(point[0], point[1])
+                Printer.DesenharPixel(point[0], point[1], color)
 
     def YLine(x,Y_points):
         points = []

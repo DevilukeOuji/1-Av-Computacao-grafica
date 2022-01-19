@@ -1,7 +1,13 @@
 from tkinter import *
+
+#cores
+red = '#f00'
+blue = '#00f'
+violet = '#9400d3'
+
 ## parametros iniciais
 tamanhoTela = 1500
-tamanhoPixel = int(tamanhoTela / 150)
+tamanhoPixel = int(tamanhoTela / 300)
 
 ## criar o canvas utilizando o tkinter
 master = Tk()
