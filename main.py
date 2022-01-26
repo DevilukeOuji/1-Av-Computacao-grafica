@@ -1,4 +1,4 @@
-import Printer
+'''import Printer as Printer
 import Bresenham
 import Curve
 import Scanline
@@ -13,4 +13,4 @@ scanline_points = scanline.Scanline()
 Bresenham.Bresenham.Draw(scanline_points, poli=True)
 
 Printer.CriarTemplate()
-mainloop()
+mainloop()'''

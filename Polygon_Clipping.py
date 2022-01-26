@@ -1,10 +1,7 @@
-from Bresenham import Bresenham
-import Printer
-from tkinter import *
-top = 74 #pick those as args
-right = 74
-bottom = -76
-left = -76
+top = 50 #pick those as args
+right = 50
+bottom = -50
+left = -50
 
 def ClipTop(polygon):
     new_polygon = []
@@ -13,6 +10,7 @@ def ClipTop(polygon):
         p1 = polygon[i]
         p2 = polygon[(i+1) % len(polygon)]
         print(p1,p2)
+        if p1[1] == 0:continue
         if(p1[0] < top): # from inside to inside
             if(p2[0] < top):
                 new_polygon.append(p2)
@@ -31,7 +29,7 @@ def ClipRight(polygon):
     for i in range(len(polygon)):    
         p1 = polygon[i]
         p2 = polygon[(i+1) % len(polygon)]
-    
+        if p1[1] == 0:continue
         if(p1[0] < right): # from inside to inside
             if(p2[0] < right):
                 new_polygon.append(p2)
@@ -50,7 +48,7 @@ def ClipBottom(polygon):
     for i in range(len(polygon)):    
         p1 = polygon[i]
         p2 = polygon[(i+1) % len(polygon)]
-    
+        if p1[1] == 0:continue
         if(p1[0] > bottom): # from inside to inside
             if(p2[0] > bottom):
                 new_polygon.append(p2)
@@ -69,7 +67,7 @@ def ClipLeft(polygon):
     for i in range(len(polygon)):    
         p1 = polygon[i]
         p2 = polygon[(i+1) % len(polygon)]
-    
+        if p1[1] == 0:continue
         if(p1[0] > left): # from inside to inside
             if(p2[0] > left):
                 new_polygon.append(p2)
@@ -83,23 +81,10 @@ def ClipLeft(polygon):
                 new_polygon.append(p2)
     return new_polygon
 
-def SutherLandHodgman(polygon):
+def PolygonClipping(polygon):
     clipped_polygon = []
     clipped_polygon = ClipTop(polygon)
     clipped_polygon = ClipRight(clipped_polygon)
     clipped_polygon = ClipBottom(clipped_polygon)
     clipped_polygon = ClipLeft(clipped_polygon)
     return clipped_polygon
-
-polygonLeft = [[-90,0],[-50,40],[0,0],[-50,-40]]
-polygonTop = [[-40,40],[100,100],[40,100]]
-polygon = [[100,100],[100,55],[74,48],[100,37],[100,-28],[0,28],[0,67],[61,100]]
-poly = [[20,0],[50,27] ,[100,50],[60,-50],[120,-70]]
-points = Bresenham.Poliline(poly)
-flat_list = [item for sublist in points for item in sublist]
-new_polygon = ClipTop(flat_list)
-
-Bresenham.Draw(new_polygon)
-
-Printer.CriarTemplate()
-mainloop()

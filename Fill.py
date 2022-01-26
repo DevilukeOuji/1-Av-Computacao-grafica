@@ -1,23 +1,18 @@
-from Printer import DesenharPixel
+from Paint import PaintPixel
 
-def GetPoint(point, points):
+def readPixel(point,points):
+    print(point,points)
+    if point in points:
+        return '#f00'
+    else:
+        return "other"
+
+def Fill(points, point, color, borderColor = '#f00'):
+    actColor = readPixel(point, points)
     x,y = point[0], point[1]
-    if [x,y] not in points:
-        print('O ponto está fora do polígono.')
-        return None
-    current = [x,y]
-    return current
-
-def Fill(point,color = "#00f",edgeColor = "#f00"):
-    x,y = point[0], point[1]
-    current = [x,y]
-
-    if current != edgeColor and current != color: #adicionar verificação.
-        DesenharPixel(x,y,color)
-        Fill([x+1,y], color, edgeColor)
-        Fill([x,y+1], color, edgeColor)
-        Fill([x-1,y], color, edgeColor)
-        Fill([x,y-1], color, edgeColor)
-
-point = GetPoint([2,6], [[1,5],[2,6]])
-Fill(point)
+    if(actColor != borderColor and actColor != color):
+        PaintPixel(x,y, color)
+        Fill(points, [x+1, y], color, borderColor)
+        Fill(points, [x, y+1], color, borderColor)
+        Fill(points, [x-1, y], color, borderColor)
+        Fill(points, [x, y-1], color, borderColor)

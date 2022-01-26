@@ -1,5 +1,6 @@
 from Bresenham import Bresenham
-
+import Printer
+from tkinter import *
 class Scanline:
 
     def __init__(self, edges) -> None:
@@ -19,7 +20,7 @@ class Scanline:
         edges = self.edges
         edges_length = len(self.edges)
         for i in range(edges_length):
-            aux = edges[(i+1)% edges_length]
+            aux = edges[(i+1) % edges_length]
             x, y = edges[i][0], edges[i][1]
 
             if y < aux[1]:
@@ -43,21 +44,21 @@ class Scanline:
         Y_list = Scanline.BoundBox(self)
         Ymin,Ymax = Scanline.GetMax(self, Y_list)
         scanline_points = []
-        for y in range(Ymin, Ymin+3):
+        for y in range(Ymin, Ymax):
             for i in range(len(active_critical_points)):
                 point = active_critical_points[i]
                 point['xIntersection'] = point['invSlope']
                 active_critical_points[i] = point
 
-            for i in range(len(self.critical_points)):
-                point = self.critical_points[i]
+            for j in range(len(self.critical_points)):
+                point = self.critical_points[j]
                 if(self.edges[point['index']][1] == y): 
                     active_critical_points += [point]
-            print(active_critical_points)
+
             active_critical_points = sorted(active_critical_points, key = lambda x: x['xIntersection'])
+
             for i in range(len(active_critical_points)-1): #linhas entre intersecções encontradas para um y
-                if i % 2 == 1:
-                    print([active_critical_points[i]['xIntersection'],y], [active_critical_points[i+1]['xIntersection'],y])
-                    new_points = Bresenham.Bresenham([active_critical_points[i]['xIntersection'],y], [active_critical_points[i+1]['xIntersection'],y])
+                if i % 2 == 0:
+                    new_points = Bresenham([active_critical_points[i]['xIntersection'],y], [active_critical_points[i+1]['xIntersection'],y])
                     scanline_points += [new_points]
         return scanline_points

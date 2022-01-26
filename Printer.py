@@ -7,7 +7,7 @@ violet = '#9400d3'
 
 ## parametros iniciais
 tamanhoTela = 1500
-tamanhoPixel = int(tamanhoTela / 300)
+tamanhoPixel = int(tamanhoTela / 150)
 
 ## criar o canvas utilizando o tkinter
 master = Tk()
@@ -34,7 +34,14 @@ def ConverterCoordenadas(x, y): # converter coordenadas para o sistema de grade
 
   return real_x, real_y
 
+def PointsConversion(x, y): # converter coordenadas para o sistema de grade
+  real_x = int((tamanhoPixel * x) + (tamanhoTela / 2))
+  real_y = int((tamanhoTela / 2) - (tamanhoPixel * y))
+  return real_x, real_y
 
+def PaintPixel(x, y, cor = '#f00'): # desenha um pixel na grade
+  x1, y1 = PointsConversion(x, y)
+  tela.create_rectangle(x1, y1, x1 + tamanhoPixel, y1 - tamanhoPixel, fill=cor)
 def DesenharPixel(x, y, cor = '#f00'): # desenha um pixel na grade
   x1, y1 = ConverterCoordenadas(x, y)
   tela.create_rectangle(x1, y1, x1 + tamanhoPixel, y1 - tamanhoPixel, fill=cor)
